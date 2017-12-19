@@ -1,7 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+/**
+ * 
+ * @author tln86
+ *
+ */
 public class Ball {
 	int x, y,width,height ;
 	public Ball (int x, int y, int width, int height) {
