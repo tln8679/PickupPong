@@ -3,7 +3,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
-
+/**
+ * 
+ * @author tln86
+ *
+ */
 public class Paddle {
 	private int startX, startY, endX, endY;
 	private Color team;
