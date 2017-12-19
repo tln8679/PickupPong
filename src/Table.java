@@ -5,7 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import javax.swing.JPanel;
-
+/**
+ * 
+ * @author tln86
+ *
+ */
 public class Table extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private final int B_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
