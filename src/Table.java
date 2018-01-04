@@ -26,7 +26,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	private final int DELAY = 25;
 	private double angle = Math.random() * 100;
 	private Ball b;
-	private boolean isSuspended;
+	private boolean isSuspended; 
 
 	private enum Direction {
 		NORTHWEST, SOUTHWEST, NORTHEAST, SOUTHEAST
@@ -209,12 +209,12 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	public void keyPressed(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
 			if (p.getStartY() > 35) {
-				p.changePos(-10);
+				p.changePos(-15);
 			}
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
 			if (p.getStartY() < T_HEIGHT - 35) {
-				p.changePos(10);
+				p.changePos(15);
 			}
 		}
 
