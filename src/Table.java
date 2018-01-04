@@ -35,7 +35,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	private Direction currentDir = Direction.SOUTHEAST;
 	private Thread animator;
 	private int x, y;
-	private int speed = 8;
+	private int speed = 15;
 	private Paddle p, p2;
 	private int score1 = 0;
 	private int score2 = 0;
@@ -104,7 +104,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 
 		// Ball Rebounds
 		if (x > T_WIDTH - 35 - p.getWidth()) {
-			if (y <= p2.getStartY() + p2.getHeight() && y >= p2.getStartY()) {
+			if (y <= p2.getStartY() + p2.getHeight()+10 && y >= p2.getStartY()) {
 			} else {
 				isSuspended = true;
 				score1 += 1;
@@ -117,8 +117,8 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 				currentDir = Direction.NORTHWEST;
 		}
 
-		if (x <= p.getWidth() - 20 && (currentDir == Direction.SOUTHWEST || currentDir == Direction.NORTHWEST)) {
-			if (y <= p.getStartY() + p.getHeight() && y >= p.getStartY()) {
+		if (x <= p.getWidth() - b.width && (currentDir == Direction.SOUTHWEST || currentDir == Direction.NORTHWEST)) {
+			if (y <= p.getStartY() + p.getHeight()+10 && y >= p.getStartY()) {
 			} else {
 				isSuspended = true;
 				score2 += 1;
