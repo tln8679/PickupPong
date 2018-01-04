@@ -1,7 +1,7 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+
 
 /**
  * 
@@ -19,7 +19,6 @@ public class Paddle {
 		height = 75;
 	}
 	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
 		g.setColor(team);
 		g.fillRect(startX, startY, width, height);
 	}
@@ -28,9 +27,12 @@ public class Paddle {
 		this.startY = startY+dy;
 		
 	}
-
-
 	
+	public void setPos(int y) {
+		this.startY = y;
+		
+	}
+
 
 	public int getStartX() {
 		return startX;

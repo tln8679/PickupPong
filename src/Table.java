@@ -26,6 +26,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	private final int DELAY = 25;
 	private double angle = Math.random() * 100;
 	private Ball b;
+	private boolean isSuspended;
 
 	private enum Direction {
 		NORTHWEST, SOUTHWEST, NORTHEAST, SOUTHEAST
@@ -34,11 +35,13 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	private Direction currentDir = Direction.SOUTHEAST;
 	private Thread animator;
 	private int x, y;
-	private int speed = 5;
+	private int speed = 8;
 	private Paddle p, p2;
+	private int score1 = 0;
+	private int score2 = 0;
 
 	public Table() {
-		while (angle > 40 || angle < 15) {
+		while (angle > 40 || angle < 25) {
 			angle = Math.random() * 100;
 		}
 		initBoard();
@@ -47,12 +50,12 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 
 	private void initBoard() {
 		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(T_WIDTH , T_HEIGHT));
+		setPreferredSize(new Dimension(T_WIDTH, T_HEIGHT));
 		setDoubleBuffered(true);
 		b = new Ball(INITIAL_X + 35, INITIAL_Y, 25, 25);
 		p = new Paddle(INITIAL_X, INITIAL_Y, Color.RED);
 		// Subtracting the width of a paddle from the width of the table
-		p2 = new Paddle(T_WIDTH -p.getWidth(), INITIAL_Y,  Color.CYAN);
+		p2 = new Paddle(T_WIDTH - p.getWidth(), INITIAL_Y, Color.CYAN);
 		x = INITIAL_X;
 		y = INITIAL_Y;
 		addKeyListener(this);
@@ -78,7 +81,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 		g.setColor(Color.WHITE);
 		g.drawLine(T_WIDTH / 2, T_HEIGHT, T_WIDTH / 2, 0);
 		// Draw paddles and ball
-		b.draw(g, x+p.getWidth(), y, b.width, b.height);
+		b.draw(g, x + p.getWidth(), y, b.width, b.height);
 		p.draw(g2);
 		p2.draw(g2);
 		// Telling the user to mouse click to start the game
@@ -89,22 +92,39 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 		if (!animator.isAlive()) {
 			g.drawString("Left or Right Click to Start", T_WIDTH / 3, T_HEIGHT / 2);
 		}
+		if (isSuspended) {
+			g2.setFont(new Font("sans-serif", Font.PLAIN, 75));
+			g.drawString(Integer.toString(score1), T_WIDTH / 10, T_HEIGHT / 5);
+			g.drawString(Integer.toString(score2), T_WIDTH - T_WIDTH / 10, T_HEIGHT / 5);
+		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void cycle() {
 
 		// Ball Rebounds
-		if (x > T_WIDTH - b.width) {
-			// angle = 90 - angle;
+		if (x > T_WIDTH - 35 - p.getWidth()) {
+			if (y <= p2.getStartY() + p2.getHeight() && y >= p2.getStartY()) {
+			} else {
+				isSuspended = true;
+				score1 += 1;
+				repaint();
+				animator.suspend();
+			}
 			if (currentDir == Direction.SOUTHEAST) {
 				currentDir = Direction.SOUTHWEST;
 			} else
 				currentDir = Direction.NORTHWEST;
 		}
 
-		if (x <= p.getWidth() && (currentDir == Direction.SOUTHWEST || currentDir == Direction.NORTHWEST)) {
-			//System.out.println(p.collides(x, y)+ " " + x+ "  "+y);
-			System.out.println(p);
+		if (x <= p.getWidth() - 20 && (currentDir == Direction.SOUTHWEST || currentDir == Direction.NORTHWEST)) {
+			if (y <= p.getStartY() + p.getHeight() && y >= p.getStartY()) {
+			} else {
+				isSuspended = true;
+				score2 += 1;
+				repaint();
+				animator.suspend();
+			}
 			if (currentDir == Direction.SOUTHWEST) {
 				currentDir = Direction.SOUTHEAST;
 			} else if (currentDir == Direction.NORTHWEST) {
@@ -152,6 +172,9 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 			// System.out.println("NW");
 			x -= speed;
 			y -= Math.PI * Math.toRadians(angle);
+		}
+		if (Math.random() > .25) {
+			p2.setPos(y);
 		}
 
 	}
@@ -226,9 +249,16 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		animator.start();
+		if (!animator.isAlive()) {
+			animator.start();
+		}
+		if (isSuspended) {
+			System.out.println("test");
+			animator.resume();
+		}
 	}
 
 	@Override
