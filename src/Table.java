@@ -19,14 +19,14 @@ import javax.swing.JPanel;
  */
 public class Table extends JPanel implements Runnable, KeyListener, MouseListener {
 	private static final long serialVersionUID = 1L;
-	private final int T_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
-	private final int T_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height / 2;
+	private final int T_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+	private final int T_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 	private final int INITIAL_X = 1;
 	private final int INITIAL_Y = T_HEIGHT / 2;
 	private final int DELAY = 25;
 	private double angle = Math.random() * 100;
 	private Ball b;
-	private boolean isSuspended; 
+	private boolean isSuspended;
 
 	private enum Direction {
 		NORTHWEST, SOUTHWEST, NORTHEAST, SOUTHEAST
@@ -85,7 +85,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 		p.draw(g2);
 		p2.draw(g2);
 		// Telling the user to mouse click to start the game
-		Font f = new Font("sans-serif", Font.PLAIN, 40);
+		Font f = new Font("sans-serif", Font.PLAIN, T_WIDTH / 45);
 		g2.setStroke(new BasicStroke(10));
 		g2.setFont(f);
 		g2.setColor(Color.ORANGE);
@@ -104,7 +104,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 
 		// Ball Rebounds
 		if (x > T_WIDTH - 35 - p.getWidth()) {
-			if (y <= p2.getStartY() + p2.getHeight()+10 && y >= p2.getStartY()) {
+			if (y <= p2.getStartY() + p2.getHeight() + 10 && y >= p2.getStartY() - 10) {
 			} else {
 				isSuspended = true;
 				score1 += 1;
@@ -118,7 +118,7 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 		}
 
 		if (x <= p.getWidth() - b.width && (currentDir == Direction.SOUTHWEST || currentDir == Direction.NORTHWEST)) {
-			if (y <= p.getStartY() + p.getHeight()+10 && y >= p.getStartY()) {
+			if (y <= p.getStartY() + p.getHeight() + 10 && y >= p.getStartY() - 10) {
 			} else {
 				isSuspended = true;
 				score2 += 1;
@@ -173,10 +173,16 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 			x -= speed;
 			y -= Math.PI * Math.toRadians(angle);
 		}
-		if (Math.random() > .25) {
+		if (Math.random() > .95) {
 			p2.setPos(y);
 		}
-
+		else if (Math.random() > .3) {
+			if (currentDir == Direction.NORTHWEST || currentDir == Direction.NORTHEAST) {
+				p2.changePos(-2);
+			}
+			else p2.changePos(2);
+		}
+		
 	}
 
 	@Override
@@ -208,13 +214,13 @@ public class Table extends JPanel implements Runnable, KeyListener, MouseListene
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_UP) {
-			if (p.getStartY() > 35) {
-				p.changePos(-15);
+			if (p.getStartY() > 0) {
+				p.changePos(-25);
 			}
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
 			if (p.getStartY() < T_HEIGHT - 35) {
-				p.changePos(15);
+				p.changePos(25);
 			}
 		}
 
